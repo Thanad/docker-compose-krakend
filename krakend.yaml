@@ -1,0 +1,32 @@
+version: 2
+name: KrakenD - API Gateway
+port: 8000
+endpoints:
+  - endpoint: "/"
+    method: GET
+    backend:
+      - url_pattern: "/ip"
+        host:
+          - http://httpbin.org/
+extra_config:
+  github_com/devopsfaith/krakend-metrics:
+    collection_time: 30s
+    listen_address: ":8090"
+  github_com/letgoapp/krakend-influx:
+    address: http://influxdb:8086
+    ttl: 25s
+    buffer_size: 0
+  github_com/devopsfaith/krakend-opencensus:
+    sample_rate: 100
+    reporting_period: 1
+    enabled_layers:
+      backend: true
+      router: true
+      pipe: true
+    exporters:
+      prometheus:
+        port: 9091
+      influxdb:
+        address: http://influxdb:8086
+        db: opencensus
+        timeout: 1s
