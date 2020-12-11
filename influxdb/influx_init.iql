@@ -1,0 +1,2 @@
+CREATE DATABASE "krakend"
+CREATE DATABASE "opencensus"

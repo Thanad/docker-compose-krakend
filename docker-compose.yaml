@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  krakend:
+    image: devopsfaith/krakend:1.2.0
+    ports:
+      - 80:8000
+      - 9091:9091 #localhost:9091/metrics
+    environment:
+      NATS_SERVER_URL: nats:4222
+    volumes:
+      - ./krakend.json:/etc/krakend/krakend.json
+  node_exporter:
+    image: prom/node-exporter
+    hostname: localhost
+    ports:
+      - 9100:9100
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus_data:/
+    ports:
+      - "9090:9090"
+  influxdb:
+    image: influxdb
+    ports:
+      - 8086:8086
+    volumes:
+      - ./influxdb/influx_init.iql:/docker-entrypoint-initdb.d/influx_init.iql/
+  grafana:
+    image: grafana/grafana
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    volumes:
+      - './grafana/provisioning:/etc/grafana/provisioning'
+    ports:
+      - "3000:3000"
+volumes:
+  prometheus_data:
+
