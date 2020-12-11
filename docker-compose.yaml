@@ -6,8 +6,6 @@ services:
       - 80:8000
       - 9091:9091 #localhost:9091/metrics
     command: run -c krakend.yaml
-    environment:
-      KRAKEND_CONFIG: krakend.yaml
     volumes:
 #     - ./krakend.json:/etc/krakend/krakend.json
       - ./krakend.yaml:/etc/krakend/krakend.yaml
